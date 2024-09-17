@@ -1,0 +1,482 @@
+{
+	"info": {
+		"_postman_id": "11701b12-f3b2-4029-ba0b-079474cded8c",
+		"name": "Exercício Módulo 13",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21933056"
+	},
+	"item": [
+		{
+			"name": "Listar usuários cadastrados",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Tempo de resposta é menor que 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}usuarios",
+					"host": [
+						"{{local}}usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Usuário encontrado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response tem os campos obrigatórios - nome, email, password, administrator e _id\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.nome).to.exist;\r",
+							"    pm.expect(responseData.email).to.exist;\r",
+							"    pm.expect(responseData.password).to.exist;\r",
+							"    pm.expect(responseData.administrador).to.exist;\r",
+							"    pm.expect(responseData._id).to.exist;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}usuarios/0uxuPY0cbmQhpEz1",
+					"host": [
+						"{{local}}usuarios"
+					],
+					"path": [
+						"0uxuPY0cbmQhpEz1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Usuário não encontrado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contém a string Usuário não encontrado\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Usuário não encontrado\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}usuarios/0uxuPY0cbmQhpEz1a",
+					"host": [
+						"{{local}}usuarios"
+					],
+					"path": [
+						"0uxuPY0cbmQhpEz1a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cadastro com sucesso",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"pm.environment.get(\"_id\", response._id);\r",
+							"\r",
+							"pm.test(\"Response status code é 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response tem os campos obrigatórios - message e _id\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.message).to.exist;\r",
+							"    pm.expect(responseData._id).to.exist;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Content-Type header é application/json\", function () {\r",
+							"  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time é menor que 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nome\": \"Fulanofdfd Silvg F\",\r\n  \"email\": \"beltrgfgfjghjghbvs@qa.com.br\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}usuarios",
+					"host": [
+						"{{local}}usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "E-mail já cadastrado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code é 400\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time é menor que 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contém a string Este email já está sendo usado\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Este email já está sendo usado\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nome\": \"Fulano da Silva\",\r\n  \"email\": \"beltrano@qa.com.br\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}usuarios",
+					"host": [
+						"{{local}}usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Alterado com sucesso",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contém a string Registro alterado com sucesso\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Registro alterado com sucesso\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nome\": \"Fulano da Silva dhgfhgfSantos\",\r\n  \"email\": \"fulandffdugjgho@qa.com\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}usuarios/Bs6qa7QBCD5ZSPCj",
+					"host": [
+						"{{local}}usuarios"
+					],
+					"path": [
+						"Bs6qa7QBCD5ZSPCj"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cadastro com sucesso",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response tem os campos obrigatórios - message e _id\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.message).to.exist;\r",
+							"    pm.expect(responseData._id).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contém a string Cadastro realizado com sucesso\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Cadastro realizado com sucesso\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nome\": \"Fulano da Silva Santos\",\r\n  \"email\": \"fulano@qa.com\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}usuarios/g9AomybnEIavlQUC",
+					"host": [
+						"{{local}}usuarios"
+					],
+					"path": [
+						"g9AomybnEIavlQUC"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "E-mail já cadastrado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contém a string Este email já está sendo usado\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Este email já está sendo usado\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nome\": \"Fulano da Silva Santos\",\r\n  \"email\": \"fulano@qa.com\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}usuarios/g9AomybnEIavlQUC",
+					"host": [
+						"{{local}}usuarios"
+					],
+					"path": [
+						"g9AomybnEIavlQUC"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registro excluído com sucesso",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contém a string Registro excluído com sucesso\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Registro excluído com sucesso\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{local}}usuarios/vC9CJfeHFKh0KQkg",
+					"host": [
+						"{{local}}usuarios"
+					],
+					"path": [
+						"vC9CJfeHFKh0KQkg"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Nenhum registro excluído",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contém a string Nenhum registro excluído\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Nenhum registro excluído\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{local}}usuarios/w1KUqYr7nd9pGUWf",
+					"host": [
+						"{{local}}usuarios"
+					],
+					"path": [
+						"w1KUqYr7nd9pGUWf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Usuário com carrinho cadastrado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contém a string Não é permitido excluir usuário com carrinho cadastrado\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Não é permitido excluir usuário com carrinho cadastrado\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{local}}usuarios/0uxuPY0cbmQhpEz1",
+					"host": [
+						"{{local}}usuarios"
+					],
+					"path": [
+						"0uxuPY0cbmQhpEz1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
